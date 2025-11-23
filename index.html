@@ -618,7 +618,8 @@
 
                 const orderId = Math.floor(Math.random() * 90000) + 10000;
                 
-                // Construir mensaje de WhatsApp con detalle completo
+                // --- INICIO DE CONSTRUCCIÓN DEL MENSAJE DE WHATSAPP ---
+                
                 let msg = `🤖 *NUEVA ORDEN KURA // #${orderId}*%0A`;
                 msg += `-----------------------------------%0A`;
                 msg += `*DATOS DEL PILOTO:*%0A`;
@@ -626,22 +627,28 @@
                 msg += `🆔 ID (Hash): ${userId}%0A`;
                 msg += `📱 Contacto: ${phone}%0A`;
                 msg += `🚚 Tipo: *${deliveryType.toUpperCase()}*%0A`;
+                
                 if(deliveryType === 'delivery') {
-                    msg += `📍 Dirección: ${address}%0A`;
+                    // Reemplazar saltos de línea en la dirección con %0A
+                    const formattedAddress = address.replace(/\n/g, ' ').trim(); 
+                    msg += `📍 Dirección: ${formattedAddress}%0A`;
                 }
+                
                 msg += `-----------------------------------%0A`;
                 msg += `*LISTA DE EQUIPO:*%0A`;
                 
+                // Agregar cada item de forma detallada
                 items.forEach((item, index) => {
-                    // Incluir nombre completo, talla y precio por item
-                    msg += `${index + 1}. ${item.name} [${item.size}] - ${formatMoney(item.price)}%0A`;
+                    // Usar * para negritas en WhatsApp y %0A para nuevo renglón
+                    msg += `${index + 1}. *${item.name}* [${item.size}] - ${formatMoney(item.price)}%0A`;
                 });
                 
                 msg += `-----------------------------------%0A`;
                 msg += `💰 *COSTO TOTAL: ${formatMoney(total)}*%0A`;
                 msg += `-----------------------------------%0A`;
-                msg += `_Esperando confirmación de envío/recolección._`;
-
+                msg += `_Esperando confirmación de envío/recolección. ID de Transacción: ${orderId}_`;
+                
+                // --- FIN DE CONSTRUCCIÓN DEL MENSAJE DE WHATSAPP ---
 
                 // Guardar en DB (asincrónico)
                 try {
