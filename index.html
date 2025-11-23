@@ -24,6 +24,15 @@
                         'neon-cyan': '#00F0FF',
                         'void': '#050505',
                         'panel': '#111111'
+                    },
+                    animation: {
+                        'grid-move': 'grid-move 20s linear infinite',
+                    },
+                    keyframes: {
+                        'grid-move': {
+                            '0%': { backgroundPosition: '0 0' },
+                            '100%': { backgroundPosition: '50px 50px' },
+                        }
                     }
                 }
             }
@@ -31,66 +40,63 @@
     </script>
 
     <style>
-        body { background-color: #050505; color: #e5e5e5; font-family: 'Saira', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #050505; color: #e5e5e5; font-family: 'Saira', sans-serif; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        /* FONDO ANIME GRID */
+        .anime-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 20s linear infinite;
+        }
 
-        /* Estilos de Tarjeta Robusta */
+        /* Estilos de Tarjeta Mecha */
         .product-card {
-            background: #111;
+            background: #0f0f0f;
             border: 1px solid #333;
-            transition: transform 0.2s, border-color 0.2s;
             position: relative;
-            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+            transition: all 0.3s ease;
         }
-        .product-card:hover {
-            border-color: #00F0FF;
-            transform: translateY(-2px);
+        .product-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #333; transition: background 0.3s;
         }
-        .product-image-container {
-            position: relative;
-            width: 100%;
-            padding-top: 125%; /* Aspect Ratio 4:5 vertical */
-            background: #1a1a1a;
-            overflow: hidden;
-        }
-        .product-image {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-        .product-card:hover .product-image { transform: scale(1.05); }
+        .product-card:hover { border-color: #00F0FF; transform: translateY(-5px); }
+        .product-card:hover::before { background: #00F0FF; }
         
         /* Botón Cyberpunk */
         .cyber-btn {
-            background: white; color: black; font-weight: 800; text-transform: uppercase;
+            background: #fff; color: #000; font-weight: 900; text-transform: uppercase;
             clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-            transition: all 0.2s;
+            transition: all 0.2s; position: relative;
         }
-        .cyber-btn:hover { background: #00F0FF; transform: translate(-1px, -1px); }
-        .cyber-btn:active { transform: translate(1px, 1px); }
+        .cyber-btn:hover { background: #00F0FF; box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); }
+        .cyber-btn.red:hover { background: #FF003C; box-shadow: 0 0 15px rgba(255, 0, 60, 0.4); color: white; }
 
         /* Loader */
-        .loader { width: 32px; height: 32px; border: 3px solid #FFF; border-bottom-color: #FF003C; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
+        .loader { width: 40px; height: 40px; border: 4px solid #333; border-top-color: #00F0FF; border-radius: 50%; animation: rotation 0.8s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Toastify Custom */
+        .toastify { background: #111 !important; border-left: 4px solid #00F0FF; font-family: 'Saira', sans-serif; font-weight: bold; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
+    
+    <div class="anime-bg"></div>
 
-    <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-40 bg-black/95 backdrop-blur border-b border-gray-800">
+    <!-- Navbar HUD -->
+    <nav class="fixed top-0 w-full z-40 bg-black/90 backdrop-blur border-b border-gray-800">
         <div class="container mx-auto px-4 h-16 flex justify-between items-center">
-            <a href="#home" onclick="router.navigate('home')" class="flex flex-col leading-none">
-                <span class="text-2xl font-cyber text-white tracking-widest">KURA STUDIO</span>
-                <span class="text-[10px] font-jp text-gray-500 tracking-[0.3em]">蔵スタジオ</span>
+            <a href="#home" onclick="router.navigate('home')" class="flex flex-col leading-none group">
+                <span class="text-2xl font-cyber text-white tracking-widest group-hover:text-neon-cyan transition">KURA</span>
+                <span class="text-[8px] font-jp text-gray-500 tracking-[0.3em] group-hover:text-neon-red">システム・オンライン</span>
             </a>
-            <button onclick="cartManager.toggle()" class="relative p-2">
-                <div class="absolute top-0 right-0 bg-neon-red text-black text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-sm" id="cart-counter">0</div>
-                <i class="fas fa-shopping-bag text-xl text-white"></i>
+            <button onclick="cartManager.toggle()" class="relative p-2 group">
+                <div class="absolute -top-1 -right-1 bg-neon-red text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center clip-path-polygon" style="clip-path: polygon(20% 0%, 100% 0, 100% 100%, 0% 100%, 0 20%);" id="cart-counter">0</div>
+                <i class="fas fa-shopping-cart text-xl text-gray-400 group-hover:text-white transition"></i>
             </button>
         </div>
     </nav>
@@ -99,87 +105,106 @@
     <main id="app-container" class="flex-grow pt-16 pb-10 min-h-screen"></main>
 
     <!-- Footer -->
-    <footer class="bg-black border-t border-gray-800 py-8 text-center text-gray-500 text-xs font-mono">
-        <p>MANAGUA, NICARAGUA © 2026 KURA STUDIO</p>
+    <footer class="bg-black border-t border-gray-900 py-10 text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-neon-cyan to-transparent opacity-50"></div>
+        <h2 class="font-cyber text-2xl text-gray-800 select-none">KURA STUDIO</h2>
+        <p class="text-[10px] text-gray-600 font-mono mt-2">DESIGNED FOR THE FUTURE // MANAGUA 2026</p>
     </footer>
 
-    <!-- CART SIDEBAR (Ahora incluye Checkout) -->
-    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-[420px] bg-[#090909] border-l border-gray-800 z-[60] transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
+    <!-- CART SIDEBAR (Checkout Integrado) -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-[#080808] border-l border-gray-800 z-[60] transform translate-x-full transition-transform duration-300 shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col">
         <!-- Header Carrito -->
-        <div class="p-5 border-b border-gray-800 flex justify-between items-center bg-black">
-            <h2 class="text-lg font-cyber text-white tracking-widest">CART / CHECKOUT</h2>
-            <button onclick="cartManager.toggle()" class="text-gray-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+        <div class="p-6 border-b border-gray-800 flex justify-between items-center bg-black/50">
+            <div>
+                <h2 class="text-xl font-cyber text-white tracking-widest text-shadow-neon">CART <span class="text-neon-cyan">///</span></h2>
+                <p class="text-[10px] text-gray-500 font-mono">SYSTEM STATUS: ACTIVE</p>
+            </div>
+            <button onclick="cartManager.toggle()" class="text-gray-500 hover:text-red-500 transition"><i class="fas fa-times text-2xl"></i></button>
         </div>
 
         <!-- Lista de Items -->
-        <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4"></div>
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
 
-        <!-- Sección de Checkout (Siempre visible si hay items) -->
-        <div id="checkout-section" class="p-5 bg-[#111] border-t border-gray-800 hidden">
-            <!-- Totales -->
+        <!-- Checkout Section -->
+        <div id="checkout-section" class="p-6 bg-[#111] border-t border-gray-800 relative hidden">
+            <!-- Decoración -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-red to-transparent"></div>
+
             <div class="flex justify-between items-end mb-6 font-mono border-b border-gray-800 pb-4">
-                <span class="text-gray-400">TOTAL A PAGAR</span>
-                <span class="text-2xl font-bold text-neon-cyan" id="cart-total">C$ 0</span>
+                <span class="text-gray-400 text-xs">TOTAL ESTIMADO</span>
+                <span class="text-3xl font-bold text-neon-cyan" id="cart-total">C$ 0</span>
             </div>
 
-            <!-- Formulario Integrado -->
+            <!-- Formulario -->
             <div class="space-y-3 mb-4">
-                <input type="text" id="cust-name" placeholder="TU NOMBRE" class="w-full bg-black border border-gray-700 p-3 text-sm text-white focus:border-neon-cyan outline-none rounded-none">
-                <input type="tel" id="cust-phone" placeholder="WHATSAPP / CELULAR" class="w-full bg-black border border-gray-700 p-3 text-sm text-white focus:border-neon-cyan outline-none rounded-none">
+                <div class="flex gap-2 text-[10px] font-bold text-gray-500 uppercase mb-1">
+                    <span class="flex-1">Datos del Piloto</span>
+                </div>
+                <input type="text" id="cust-name" placeholder="NOMBRE COMPLETO" class="w-full bg-[#050505] border border-gray-700 p-3 text-sm text-white focus:border-neon-cyan outline-none transition placeholder-gray-700">
+                <input type="tel" id="cust-phone" placeholder="WHATSAPP / CELULAR" class="w-full bg-[#050505] border border-gray-700 p-3 text-sm text-white focus:border-neon-cyan outline-none transition placeholder-gray-700">
                 
-                <!-- Toggle Delivery -->
-                <div class="flex gap-2">
-                    <button onclick="logic.setDelivery('pickup')" id="btn-pickup" class="flex-1 py-2 text-xs font-bold border border-gray-600 text-gray-400 hover:text-white">TIENDA</button>
-                    <button onclick="logic.setDelivery('delivery')" id="btn-delivery" class="flex-1 py-2 text-xs font-bold border border-gray-600 text-gray-400 hover:text-white">DELIVERY</button>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <button onclick="logic.setDelivery('pickup')" id="btn-pickup" class="py-3 text-xs font-bold border border-gray-700 text-gray-400 hover:text-white hover:border-neon-cyan transition flex flex-col items-center gap-1">
+                        <i class="fas fa-store"></i> TIENDA
+                    </button>
+                    <button onclick="logic.setDelivery('delivery')" id="btn-delivery" class="py-3 text-xs font-bold border border-gray-700 text-gray-400 hover:text-white hover:border-neon-cyan transition flex flex-col items-center gap-1">
+                        <i class="fas fa-motorcycle"></i> DELIVERY
+                    </button>
                 </div>
 
-                <!-- Dirección (Condicional) -->
-                <textarea id="cust-address" placeholder="DIRECCIÓN EXACTA (Barrio, casa, color...)" class="hidden w-full bg-black border border-gray-700 p-3 text-sm text-white focus:border-neon-cyan outline-none rounded-none h-20 resize-none"></textarea>
+                <textarea id="cust-address" placeholder="DIRECCIÓN EXACTA DE ENTREGA..." class="hidden w-full bg-[#050505] border border-gray-700 p-3 text-sm text-white focus:border-neon-cyan outline-none h-20 resize-none placeholder-gray-700 mt-2"></textarea>
             </div>
 
-            <button onclick="logic.sendOrder()" class="w-full bg-[#25D366] text-black font-black py-4 text-sm tracking-widest hover:brightness-110 transition flex items-center justify-center gap-2 cyber-btn">
-                <i class="fab fa-whatsapp text-lg"></i> ENVIAR PEDIDO
+            <button onclick="logic.sendOrder()" class="w-full cyber-btn py-4 text-sm tracking-[0.2em] flex items-center justify-center gap-3 mt-6">
+                <i class="fab fa-whatsapp text-lg"></i> INICIAR PEDIDO
             </button>
         </div>
     </div>
-    <div id="cart-overlay" onclick="cartManager.toggle()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[55] hidden transition-opacity opacity-0"></div>
+    <div id="cart-overlay" onclick="cartManager.toggle()" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[55] hidden transition-opacity opacity-0"></div>
 
-    <!-- Modal Producto (Optimizado Móvil) -->
+    <!-- Modal Producto (Fix Móvil) -->
     <div id="product-modal" class="fixed inset-0 z-[70] hidden items-end md:items-center justify-center md:p-4">
-        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="router.closeModal()"></div>
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="router.closeModal()"></div>
         
-        <!-- Contenido Modal -->
-        <div class="relative w-full md:max-w-4xl bg-[#111] border-t border-gray-700 md:border border-gray-700 shadow-2xl flex flex-col md:flex-row h-[85vh] md:h-auto md:max-h-[90vh] overflow-hidden rounded-t-2xl md:rounded-none animate-[slideUp_0.3s_ease-out]">
+        <div class="relative w-full md:max-w-4xl bg-[#111] border border-gray-800 shadow-[0_0_50px_rgba(0,240,255,0.1)] flex flex-col md:flex-row h-[90vh] md:h-auto md:max-h-[90vh] overflow-hidden animate-[slideUp_0.3s_ease-out]">
             
-            <!-- Botón Cerrar (Móvil Flotante) -->
-            <button onclick="router.closeModal()" class="absolute top-4 right-4 z-10 bg-black/50 rounded-full p-2 text-white md:hidden"><i class="fas fa-times"></i></button>
+            <!-- Botón Cerrar Flotante Móvil -->
+            <button onclick="router.closeModal()" class="absolute top-4 right-4 z-20 bg-black/60 backdrop-blur rounded-full w-8 h-8 flex items-center justify-center text-white md:hidden border border-gray-700"><i class="fas fa-times"></i></button>
 
             <!-- Imagen -->
-            <div class="h-64 md:h-auto md:w-1/2 relative bg-gray-900 shrink-0">
+            <div class="h-1/2 md:h-auto md:w-1/2 relative bg-gray-900 shrink-0 border-b md:border-b-0 md:border-r border-gray-800">
                 <img id="modal-img" src="" class="absolute inset-0 w-full h-full object-cover">
+                <!-- Decoración sobre imagen -->
+                <div class="absolute bottom-4 left-4 bg-black/80 border border-neon-cyan px-2 py-1 text-[10px] text-neon-cyan font-cyber tracking-widest">UNIT-01</div>
             </div>
 
-            <!-- Detalles (Scrollable) -->
-            <div class="flex-1 p-6 md:p-10 flex flex-col overflow-y-auto">
-                <div class="flex justify-between items-start mb-2">
-                    <h2 id="modal-title" class="text-3xl md:text-4xl font-cyber text-white leading-none"></h2>
-                    <button onclick="router.closeModal()" class="hidden md:block text-gray-500 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            <!-- Info (Scrollable) -->
+            <div class="flex-1 p-6 md:p-10 flex flex-col overflow-y-auto bg-[#0a0a0a]">
+                <div class="flex justify-between items-start mb-1">
+                    <h2 id="modal-title" class="text-3xl md:text-5xl font-cyber text-white leading-none uppercase"></h2>
+                    <button onclick="router.closeModal()" class="hidden md:block text-gray-500 hover:text-white"><i class="fas fa-times text-2xl"></i></button>
                 </div>
                 
-                <p id="modal-price" class="text-xl text-neon-cyan font-bold font-mono mb-4"></p>
+                <div class="flex items-center gap-3 mb-6">
+                    <p id="modal-price" class="text-2xl text-neon-cyan font-bold font-mono"></p>
+                    <span class="text-[10px] bg-gray-800 px-2 py-0.5 rounded text-gray-400">STOCK AVAILABLE</span>
+                </div>
                 
                 <div class="flex-1">
-                    <p id="modal-desc" class="text-gray-400 text-sm leading-relaxed mb-6 font-mono"></p>
+                    <p id="modal-desc" class="text-gray-400 text-sm leading-relaxed mb-8 font-mono border-l-2 border-gray-800 pl-4"></p>
                     
-                    <!-- Selector de Tallas -->
-                    <div class="mb-6">
-                        <label class="text-xs font-bold text-gray-500 mb-2 block uppercase">Selecciona Talla</label>
-                        <div id="modal-sizes" class="flex flex-wrap gap-3"></div>
+                    <!-- Selector de Tallas (Arreglado) -->
+                    <div class="mb-8">
+                        <label class="text-[10px] font-bold text-gray-500 mb-3 block uppercase tracking-widest">SELECCIONAR TALLA <span class="text-neon-red">*</span></label>
+                        <div id="modal-sizes" class="flex flex-wrap gap-2">
+                            <!-- JS Inyecta botones aquí -->
+                        </div>
+                        <input type="hidden" id="selected-size-input"> <!-- Input oculto para guardar talla -->
                     </div>
                 </div>
 
-                <button id="modal-btn-add" class="w-full cyber-btn py-4 mt-4 tracking-widest text-sm shadow-[4px_4px_0px_#333]">
-                    AGREGAR AL CARRITO
+                <button id="modal-btn-add" class="w-full cyber-btn py-4 mt-4 tracking-[0.2em] text-sm">
+                    AGREGAR AL SISTEMA
                 </button>
             </div>
         </div>
@@ -202,7 +227,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- ESTADO ---
+        // --- ESTADO GLOBAL ---
         const state = {
             products: [],
             cart: JSON.parse(localStorage.getItem('cart')) || []
@@ -216,14 +241,23 @@
 
         const showToast = (msg, type = 'success') => {
             Toastify({
-                text: msg, duration: 3000, gravity: "bottom", position: "center",
-                style: { background: type === 'error' ? "#FF003C" : "#00F0FF", color: "black", fontWeight: "800", textTransform: "uppercase" }
+                text: msg, duration: 2500, gravity: "bottom", position: "center",
+                style: { 
+                    background: type === 'error' ? "rgba(255, 0, 60, 0.9)" : "rgba(0, 240, 255, 0.9)", 
+                    color: "black", 
+                    fontWeight: "900", 
+                    textTransform: "uppercase",
+                    border: "1px solid white",
+                    fontSize: "12px",
+                    letterSpacing: "1px"
+                }
             }).showToast();
         };
 
         // --- LOGIC ---
         window.logic = {
-            deliveryType: 'pickup', // Default
+            deliveryType: 'pickup', 
+            selectedSize: null, // Variable temporal para la talla seleccionada
 
             init: async () => {
                 logic.renderHome();
@@ -243,11 +277,11 @@
                         state.products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
                         logic.renderProducts();
                     } else {
-                        grid.innerHTML = '<p class="col-span-full text-center text-gray-500">NO INVENTORY FOUND</p>';
+                        grid.innerHTML = '<p class="col-span-full text-center text-gray-500 font-mono">NO DATA RECEIVED</p>';
                     }
                 } catch (e) {
                     console.error(e);
-                    grid.innerHTML = '<p class="col-span-full text-center text-red-500">ERROR LOADING DATA</p>';
+                    grid.innerHTML = '<p class="col-span-full text-center text-red-500 font-mono">CONNECTION ERROR</p>';
                 }
             },
 
@@ -257,21 +291,20 @@
                 
                 state.products.forEach(p => {
                     const img = p.image || p.imageUrl || 'https://placehold.co/600x800/111/333?text=NO+IMG';
-                    const price = formatMoney(p.price);
                     
                     grid.innerHTML += `
-                        <div onclick="logic.openModal('${p.id}')" class="product-card cursor-pointer group">
-                            <div class="product-image-container">
-                                <img src="${img}" class="product-image" loading="lazy">
-                                <div class="absolute bottom-0 left-0 bg-black/80 backdrop-blur px-3 py-1 border-t border-r border-gray-800">
-                                    <span class="text-xs font-bold text-white tracking-widest">${p.category || 'ITEM'}</span>
+                        <div onclick="logic.openModal('${p.id}')" class="product-card group cursor-pointer overflow-hidden">
+                            <div class="relative w-full pt-[125%] bg-[#1a1a1a] overflow-hidden">
+                                <img src="${img}" class="absolute top-0 left-0 w-full h-full object-cover transition duration-700 group-hover:scale-110" loading="lazy">
+                                <div class="absolute top-2 right-2 bg-black/60 backdrop-blur border border-white/20 px-2 py-1">
+                                    <span class="text-[10px] font-bold text-white tracking-widest uppercase">${p.category || 'ITEM'}</span>
                                 </div>
                             </div>
-                            <div class="p-4 bg-[#111]">
-                                <h3 class="text-white font-bold font-body text-lg leading-tight mb-1 truncate">${p.name}</h3>
-                                <div class="flex justify-between items-center">
-                                    <p class="text-neon-cyan font-mono font-bold">${price}</p>
-                                    <span class="text-xs text-gray-500 font-bold group-hover:text-white transition">VER +</span>
+                            <div class="p-4 bg-[#0f0f0f]">
+                                <h3 class="text-white font-bold text-md leading-tight mb-2 truncate group-hover:text-neon-cyan transition">${p.name}</h3>
+                                <div class="flex justify-between items-center border-t border-gray-800 pt-3">
+                                    <p class="text-white font-mono font-bold">${formatMoney(p.price)}</p>
+                                    <i class="fas fa-arrow-right text-gray-600 group-hover:text-neon-cyan -rotate-45 group-hover:rotate-0 transition"></i>
                                 </div>
                             </div>
                         </div>
@@ -279,51 +312,66 @@
                 });
             },
 
+            // --- LÓGICA MODAL CORREGIDA ---
             openModal: (id) => {
                 const p = state.products.find(x => x.id === id);
                 if (!p) return;
 
+                // Resetear selección
+                logic.selectedSize = null;
+                document.getElementById('selected-size-input').value = "";
+
+                // Llenar datos visuales
                 document.getElementById('modal-img').src = p.image || p.imageUrl || 'https://placehold.co/600x800';
                 document.getElementById('modal-title').innerText = p.name;
                 document.getElementById('modal-price').innerText = formatMoney(p.price);
-                document.getElementById('modal-desc').innerText = p.desc || p.description || 'Sin descripción.';
+                document.getElementById('modal-desc').innerText = p.desc || p.description || 'Sin información adicional.';
 
-                // Tallas
+                // Generar Botones de Talla
                 const sizesContainer = document.getElementById('modal-sizes');
                 sizesContainer.innerHTML = '';
                 
-                // Procesar tallas (Array o String separado por comas)
                 let sizes = [];
                 if(Array.isArray(p.sizes)) sizes = p.sizes;
-                else if(typeof p.sizes === 'string') sizes = p.sizes.split(','); // Soporte legacy
-                else if(typeof p.sizesString === 'string') sizes = p.sizesString.split(','); // Soporte legacy 2
-
+                else if(typeof p.sizes === 'string') sizes = p.sizes.split(',');
+                else if(typeof p.sizesString === 'string') sizes = p.sizesString.split(',');
                 if(sizes.length === 0) sizes = ['UNICA'];
 
                 sizes.forEach(s => {
                     const cleanSize = s.trim();
-                    const radio = document.createElement('input');
-                    radio.type = 'radio';
-                    radio.name = 'size_select';
-                    radio.value = cleanSize;
-                    radio.className = 'peer sr-only';
+                    const btn = document.createElement('button');
+                    // Estilos base del botón de talla
+                    btn.className = 'size-btn border border-gray-700 text-gray-400 w-12 h-12 flex items-center justify-center font-bold font-mono text-sm hover:border-white hover:text-white transition';
+                    btn.innerText = cleanSize;
                     
-                    const label = document.createElement('label');
-                    label.className = 'w-10 h-10 md:w-12 md:h-12 flex items-center justify-center border border-gray-600 cursor-pointer peer-checked:bg-white peer-checked:text-black peer-checked:border-white hover:border-neon-cyan transition font-bold font-mono text-sm';
-                    label.innerText = cleanSize;
+                    // Evento click manual para control total
+                    btn.onclick = () => {
+                        // 1. Quitar clase 'active' de todos
+                        document.querySelectorAll('.size-btn').forEach(b => {
+                            b.classList.remove('bg-white', 'text-black', 'border-white');
+                            b.classList.add('border-gray-700', 'text-gray-400');
+                        });
+                        // 2. Activar este
+                        btn.classList.remove('border-gray-700', 'text-gray-400');
+                        btn.classList.add('bg-white', 'text-black', 'border-white');
+                        
+                        // 3. Guardar valor
+                        logic.selectedSize = cleanSize;
+                    };
                     
-                    const wrapper = document.createElement('label');
-                    wrapper.appendChild(radio);
-                    wrapper.appendChild(label);
-                    sizesContainer.appendChild(wrapper);
+                    sizesContainer.appendChild(btn);
                 });
 
-                // Setup Botón
-                const btn = document.getElementById('modal-btn-add');
-                btn.onclick = () => {
-                    const selected = document.querySelector('input[name="size_select"]:checked');
-                    if(!selected) return showToast('⚠️ ELIGE UNA TALLA', 'error');
-                    cartManager.add(p, selected.value);
+                // Configurar botón AGREGAR
+                const addBtn = document.getElementById('modal-btn-add');
+                addBtn.onclick = () => {
+                    if(!logic.selectedSize) {
+                        // Animación de error en los botones de talla
+                        sizesContainer.classList.add('animate-pulse');
+                        setTimeout(() => sizesContainer.classList.remove('animate-pulse'), 500);
+                        return showToast('⚠️ SELECCIONA UNA TALLA', 'error');
+                    }
+                    cartManager.add(p, logic.selectedSize);
                     router.closeModal();
                 };
 
@@ -338,14 +386,21 @@
                 const btnP = document.getElementById('btn-pickup');
                 const btnD = document.getElementById('btn-delivery');
 
+                // Reset estilos
+                [btnP, btnD].forEach(b => {
+                    b.classList.remove('border-neon-cyan', 'text-neon-cyan', 'bg-gray-900');
+                    b.classList.add('border-gray-700', 'text-gray-400');
+                });
+
                 if (type === 'delivery') {
                     addr.classList.remove('hidden');
-                    btnD.classList.add('border-neon-cyan', 'text-neon-cyan');
-                    btnP.classList.remove('border-neon-cyan', 'text-neon-cyan');
+                    btnD.classList.add('border-neon-cyan', 'text-neon-cyan', 'bg-gray-900');
+                    btnD.classList.remove('border-gray-700', 'text-gray-400');
+                    addr.focus();
                 } else {
                     addr.classList.add('hidden');
-                    btnP.classList.add('border-neon-cyan', 'text-neon-cyan');
-                    btnD.classList.remove('border-neon-cyan', 'text-neon-cyan');
+                    btnP.classList.add('border-neon-cyan', 'text-neon-cyan', 'bg-gray-900');
+                    btnP.classList.remove('border-gray-700', 'text-gray-400');
                 }
             },
 
@@ -356,62 +411,78 @@
                 const phone = document.getElementById('cust-phone').value.trim();
                 const address = document.getElementById('cust-address').value.trim();
 
-                if (!name) return showToast('Falta tu nombre', 'error');
-                if (!phone) return showToast('Falta tu teléfono', 'error');
-                if (logic.deliveryType === 'delivery' && !address) return showToast('Falta la dirección de entrega', 'error');
+                if (!name) return showToast('INGRESA TU NOMBRE', 'error');
+                if (!phone) return showToast('INGRESA TU WHATSAPP', 'error');
+                if (logic.deliveryType === 'delivery' && !address) return showToast('INGRESA DIRECCIÓN', 'error');
 
-                // Construir Mensaje
-                const orderId = Math.floor(Math.random() * 10000);
-                let msg = `🔥 *PEDIDO NUEVO KURA - #${orderId}* 🔥%0A`;
-                msg += `👤 *Cliente:* ${name}%0A`;
-                msg += `📱 *Tel:* ${phone}%0A`;
-                msg += `🚚 *Entrega:* ${logic.deliveryType.toUpperCase()}%0A`;
-                if(logic.deliveryType === 'delivery') msg += `📍 *Dirección:* ${address}%0A`;
+                const orderId = Math.floor(Math.random() * 90000) + 10000;
+                let msg = `👺 *KURA ORDER // #${orderId}* %0A`;
+                msg += `👤 ${name}%0A`;
+                msg += `📱 ${phone}%0A`;
+                msg += `📦 *${logic.deliveryType.toUpperCase()}*`;
+                if(logic.deliveryType === 'delivery') msg += ` - ${address}`;
+                msg += `%0A%0A*--- GEAR ---*%0A`;
                 
-                msg += `%0A*--- CARRITO ---*%0A`;
                 let total = 0;
                 state.cart.forEach(item => {
                     total += (item.price || 0);
-                    msg += `▪ ${item.name} (Talla: ${item.size}) - C$${item.price}%0A`;
+                    msg += `▪ ${item.name} [${item.size}] C$${item.price}%0A`;
                 });
                 msg += `%0A💰 *TOTAL: C$ ${total}*`;
 
-                // Enviar
                 window.open(`https://wa.me/50584016969?text=${msg}`, '_blank');
                 
-                // Opcional: Guardar en DB para historial
-                push(ref(db, 'orders'), {
-                    date: new Date().toISOString(),
-                    client: { name, phone, address },
-                    items: state.cart,
-                    total: total,
-                    type: logic.deliveryType
-                });
+                // Guardar en DB (opcional)
+                try {
+                    push(ref(db, 'orders'), {
+                        id: orderId,
+                        date: new Date().toISOString(),
+                        client: { name, phone, address },
+                        items: state.cart,
+                        total: total,
+                        type: logic.deliveryType
+                    });
+                } catch(e) {}
 
                 cartManager.clear();
             },
 
             renderHome: () => {
                 document.getElementById('app-container').innerHTML = `
-                    <div class="relative h-[60vh] md:h-[70vh] flex items-center justify-center bg-[#111] overflow-hidden">
-                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605218427368-35b0185e3d74?q=80&w=2000')] bg-cover bg-center opacity-40 grayscale"></div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent"></div>
-                        <div class="relative z-10 text-center px-4 animate-[fadeIn_1s]">
-                            <h1 class="text-6xl md:text-9xl font-cyber text-white mb-2 leading-none">KURA<span class="text-neon-red">.</span></h1>
-                            <p class="text-gray-300 font-mono tracking-widest text-sm md:text-base border-t border-b border-gray-600 py-2 inline-block">STREETWEAR FROM NICARAGUA</p>
-                            <br>
-                            <button onclick="document.getElementById('shop-section').scrollIntoView({behavior:'smooth'})" class="mt-8 cyber-btn px-8 py-3 text-sm tracking-widest">
-                                VER COLECCIÓN
+                    <div class="relative h-[65vh] flex items-center justify-center bg-[#050505] overflow-hidden border-b border-gray-800">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=2000')] bg-cover bg-center opacity-30 grayscale mix-blend-screen"></div>
+                        
+                        <!-- Elementos Decorativos Anime -->
+                        <div class="absolute top-10 left-10 text-[10px] font-mono text-neon-cyan writing-vertical hidden md:block opacity-70">
+                            システム起動<br>STATUS: NORMAL<br>SYNC: 100%
+                        </div>
+                        
+                        <div class="relative z-10 text-center px-4">
+                            <h1 class="text-6xl md:text-9xl font-cyber text-white mb-0 leading-none tracking-tighter animate-[glitch_1s_infinite] select-none">KURA<span class="text-neon-cyan">.</span></h1>
+                            <div class="h-[1px] w-24 bg-neon-red mx-auto my-4"></div>
+                            <p class="text-gray-400 font-mono tracking-[0.3em] text-xs md:text-sm">NICARAGUA STREETWEAR</p>
+                            
+                            <button onclick="document.getElementById('shop-section').scrollIntoView({behavior:'smooth'})" class="mt-10 cyber-btn px-8 py-3 text-sm tracking-widest border border-transparent hover:border-white">
+                                ACCESS SHOP
                             </button>
                         </div>
                     </div>
 
-                    <div id="shop-section" class="container mx-auto px-4 py-16">
-                        <div class="flex items-end justify-between mb-8 border-b border-gray-800 pb-4">
-                            <h2 class="text-2xl md:text-4xl font-cyber text-white">LATEST DROP</h2>
-                            <span class="text-xs font-mono text-gray-500">SEC.01 // 2026</span>
+                    <!-- Marquee -->
+                    <div class="bg-neon-cyan text-black py-2 overflow-hidden border-y border-black font-bold text-xs font-mono tracking-widest">
+                        <div class="whitespace-nowrap animate-[marquee_20s_linear_infinite]">
+                            /// NEW COLLECTION DROPPED /// WORLDWIDE SHIPPING /// MANAGUA /// ANIME AESTHETIC /// KURA STUDIO 2026 ///
                         </div>
-                        <div id="products-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+                    </div>
+
+                    <div id="shop-section" class="container mx-auto px-4 py-16">
+                        <div class="flex items-end justify-between mb-10 pb-4 border-b border-gray-800">
+                            <div>
+                                <h2 class="text-3xl md:text-4xl font-cyber text-white">GEAR LIST</h2>
+                                <p class="text-[10px] text-neon-red font-mono mt-1">/// COLLECTION_01</p>
+                            </div>
+                        </div>
+                        <div id="products-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                             <!-- Productos aquí -->
                         </div>
                     </div>
@@ -436,14 +507,14 @@
                     ov.classList.remove('pointer-events-none');
                     requestAnimationFrame(() => ov.classList.remove('opacity-0'));
                     
-                    // Inicializar estado del toggle delivery
+                    // Resetear formulario delivery
                     logic.setDelivery('pickup');
                 }
             },
             add: (product, size) => {
                 state.cart.push({ ...product, size, cartId: Date.now() });
                 cartManager.save();
-                showToast('ITEM AGREGADO');
+                showToast(`+ ${product.name}`);
             },
             remove: (cartId) => {
                 state.cart = state.cart.filter(x => x.cartId !== cartId);
@@ -467,7 +538,12 @@
                 let total = 0;
 
                 if (state.cart.length === 0) {
-                    container.innerHTML = `<div class="h-full flex flex-col items-center justify-center text-gray-600 font-mono text-sm"><i class="fas fa-ghost text-4xl mb-3 opacity-50"></i><p>TU CARRITO ESTÁ VACÍO</p></div>`;
+                    container.innerHTML = `
+                        <div class="h-full flex flex-col items-center justify-center text-gray-700 font-mono text-xs text-center p-10 border border-dashed border-gray-900 rounded">
+                            <i class="fas fa-cube text-4xl mb-4 opacity-50"></i>
+                            <p>NO DATA FOUND<br>ADD GEAR TO CART</p>
+                        </div>
+                    `;
                     checkoutSec.classList.add('hidden');
                 } else {
                     checkoutSec.classList.remove('hidden');
@@ -476,14 +552,16 @@
                         const img = item.image || item.imageUrl || 'https://placehold.co/100';
                         
                         container.innerHTML += `
-                            <div class="flex gap-3 bg-[#161616] p-2 border border-gray-800 relative">
-                                <img src="${img}" class="w-16 h-20 object-cover grayscale">
+                            <div class="flex gap-3 bg-[#111] p-3 border border-gray-800 relative group transition hover:border-gray-600">
+                                <img src="${img}" class="w-16 h-20 object-cover grayscale opacity-80 group-hover:opacity-100 group-hover:grayscale-0 transition">
                                 <div class="flex-1 flex flex-col justify-center">
-                                    <h4 class="font-bold text-white text-sm leading-tight line-clamp-1">${item.name}</h4>
-                                    <p class="text-xs text-gray-500 font-mono mt-1">TALLA: <span class="text-white">${item.size}</span></p>
-                                    <p class="text-neon-cyan font-bold text-sm mt-1">${formatMoney(item.price)}</p>
+                                    <h4 class="font-bold text-white text-xs leading-tight line-clamp-1 mb-1">${item.name}</h4>
+                                    <div class="flex gap-2 text-[10px] font-mono text-gray-500">
+                                        <span class="border border-gray-700 px-1 rounded text-gray-300">${item.size}</span>
+                                    </div>
+                                    <p class="text-neon-cyan font-bold text-sm mt-2">${formatMoney(item.price)}</p>
                                 </div>
-                                <button onclick="cartManager.remove(${item.cartId})" class="p-2 text-gray-600 hover:text-red-500 transition"><i class="fas fa-times"></i></button>
+                                <button onclick="cartManager.remove(${item.cartId})" class="text-gray-600 hover:text-red-500 transition px-2"><i class="fas fa-times"></i></button>
                             </div>
                         `;
                     });
@@ -503,6 +581,20 @@
         // Init
         logic.init();
         cartManager.render();
+
+        // Keyframe Animation fallback for Tailwind
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+            @keyframes glitch { 
+                0% { text-shadow: 2px 2px 0px #FF003C, -2px -2px 0px #00F0FF; } 
+                2% { text-shadow: -2px 2px 0px #FF003C, 2px -2px 0px #00F0FF; } 
+                4% { text-shadow: 0px 0px 0px transparent; } 
+            }
+            @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+            .writing-vertical { writing-mode: vertical-rl; text-orientation: mixed; }
+        `;
+        document.head.appendChild(style);
 
     </script>
 </body>
