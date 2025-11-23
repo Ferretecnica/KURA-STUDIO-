@@ -3,125 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KURA STUDIO | STREETWEAR</title>
+    <title>KURA STUDIO | 蔵スタジオ</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts: Saira (Futurista) y Noto Sans JP (Japonés) -->
+    <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=Saira:wght@400;700;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Toastify para notificaciones elegantes -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'cyber': ['"Saira Stencil One"', 'sans-serif'],
+                        'body': ['"Saira"', 'sans-serif'],
+                        'jp': ['"Noto Sans JP"', 'sans-serif'],
+                    },
+                    colors: {
+                        'neon-red': '#FF003C',
+                        'neon-cyan': '#00F0FF',
+                        'void': '#050505',
+                        'panel': '#111111'
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #222 1px, transparent 1px), linear-gradient(to bottom, #222 1px, transparent 1px)"
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
-        body { font-family: 'Space Mono', monospace; background-color: #f3f4f6; }
-        h1, h2, h3, .font-street { font-family: 'Anton', sans-serif; letter-spacing: 0.05em; }
-        .border-brutal { border: 2px solid black; box-shadow: 4px 4px 0px black; transition: all 0.1s; }
-        .border-brutal:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px black; }
-        .marquee { white-space: nowrap; overflow: hidden; }
-        .marquee span { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
-        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+        /* Estilos Base Anime/Cyberpunk */
+        body {
+            background-color: #050505;
+            color: #e5e5e5;
+            font-family: 'Saira', sans-serif;
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(50, 50, 50, 0.3) 1px, transparent 1px), 
+                              linear-gradient(to bottom, rgba(50, 50, 50, 0.3) 1px, transparent 1px);
+        }
+
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #FF003C; }
+
+        /* Efecto Glitch en Textos */
+        .glitch-text { position: relative; }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #050505;
+        }
+        .glitch-text::before {
+            left: 2px; text-shadow: -1px 0 #FF003C; clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px; text-shadow: -1px 0 #00F0FF; clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim { 0% { clip: rect(10px, 9999px, 30px, 0); } 100% { clip: rect(5px, 9999px, 80px, 0); } }
+        @keyframes glitch-anim-2 { 0% { clip: rect(60px, 9999px, 80px, 0); } 100% { clip: rect(10px, 9999px, 50px, 0); } }
+
+        /* Botones y Utilidades */
+        .clip-btn {
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+            transition: all 0.2s;
+        }
+        .clip-btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0px rgba(0, 240, 255, 0.5); }
+        
+        .loader {
+            width: 48px; height: 48px; border: 3px solid #FFF; border-radius: 50%; display: inline-block; position: relative; box-sizing: border-box; animation: rotation 1s linear infinite;
+        }
+        .loader::after {
+            content: ''; box-sizing: border-box; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; border: 3px solid transparent; border-bottom-color: #FF003C;
+        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="flex flex-col min-h-screen text-black selection:bg-black selection:text-white">
+<body class="flex flex-col min-h-screen overflow-x-hidden">
 
-    <!-- Marquee -->
-    <div class="bg-black text-white py-2 border-b-2 border-black font-bold text-xs uppercase marquee">
-        <span>KURA STUDIO © 2026 /// WORLDWIDE SHIPPING /// NEW COLLECTION DROP /// ESTILO SIN REGLAS /// KURA STUDIO © 2026</span>
-    </div>
-
-    <!-- Navbar -->
-    <nav class="bg-white border-b-2 border-black sticky top-0 z-40 px-4 py-4 flex justify-between items-center">
-        <a href="#" class="text-3xl font-street tracking-wide">KURA STUDIO.</a>
-        <div class="flex items-center gap-4">
-            <div id="user-display" class="hidden md:block text-xs font-bold bg-gray-200 px-2 py-1"></div>
-            <button onclick="toggleCart()" class="relative border-2 border-black px-3 py-1 hover:bg-black hover:text-white transition">
-                CART (<span id="cart-count">0</span>)
-            </button>
-        </div>
-    </nav>
-
-    <!-- Hero -->
-    <header class="bg-white border-b-2 border-black py-20 px-4 text-center relative overflow-hidden">
-        <h1 class="text-6xl md:text-9xl uppercase leading-none mb-4">Urban<br><span class="text-gray-400">Chaos</span></h1>
-        <p class="max-w-md mx-auto font-bold mb-8 border-l-4 border-black pl-4 text-left">
-            Anime. Arte. Minimalismo.
-        </p>
-        <button onclick="document.getElementById('shop').scrollIntoView()" class="bg-black text-white px-8 py-3 font-bold border-brutal hover:bg-white hover:text-black">
-            VER COLECCIÓN
-        </button>
-    </header>
-
-    <!-- Tienda -->
-    <main id="shop" class="container mx-auto px-4 py-16 flex-grow">
-        <div class="flex justify-between items-end mb-8 border-b-2 border-black pb-2">
-            <h2 class="text-4xl font-street">LATEST DROP</h2>
-        </div>
-
-        <div id="loader" class="text-center py-10 font-bold">CARGANDO INVENTARIO...</div>
-        
-        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- JS Inyectará productos aquí -->
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-black text-white py-8 border-t-4 border-white text-center">
-        <h3 class="text-4xl font-street mb-2">KURA STUDIO 2026</h3>
-        <p class="text-xs text-gray-500">MANAGUA, NICARAGUA</p>
-        <p class="text-[10px] mt-4 text-gray-600">BY KODIALABS</p>
-    </footer>
-
-    <!-- Modal Carrito -->
-    <div id="cart-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleCart()"></div>
-        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white border-l-2 border-black flex flex-col">
-            <div class="p-6 bg-black text-white flex justify-between items-center">
-                <h2 class="text-2xl font-street">YOUR STASH</h2>
-                <button onclick="toggleCart()"><i class="fas fa-times text-xl"></i></button>
+    <!-- Navegación -->
+    <nav class="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-4 h-16 flex justify-between items-center">
+            <a href="#home" class="flex flex-col leading-none group cursor-pointer" onclick="router.navigate('home')">
+                <span class="text-2xl font-cyber text-white tracking-widest group-hover:text-neon-red transition">KURA</span>
+                <span class="text-[10px] font-jp text-gray-500 tracking-[0.3em] group-hover:text-neon-cyan transition">蔵スタジオ</span>
+            </a>
+            <div class="hidden md:flex gap-8 items-center font-bold text-sm tracking-widest">
+                <a href="#shop" class="hover:text-neon-cyan transition decoration-neon-red underline-offset-4 hover:underline">SHOP <span class="font-jp text-xs opacity-50">店</span></a>
+                <a href="#about" class="hover:text-neon-cyan transition">ABOUT <span class="font-jp text-xs opacity-50">私</span></a>
             </div>
-            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50"></div>
-            <div class="p-6 border-t-2 border-black bg-white">
-                <div class="flex justify-between font-bold text-xl mb-4">
-                    <span>TOTAL</span>
-                    <span id="cart-total">$0.00</span>
-                </div>
-                
-                <!-- Checkout Form -->
-                <div id="checkout-box" class="hidden space-y-3">
-                    <select id="delivery-type" onchange="toggleAddress()" class="w-full border-2 border-black p-2 font-bold bg-white">
-                        <option value="pickup">RECOGER EN TIENDA</option>
-                        <option value="delivery">DELIVERY (ENVÍO)</option>
-                    </select>
-                    <input id="c-name" type="text" placeholder="TU NOMBRE" class="w-full border-2 border-black p-2 font-bold">
-                    <textarea id="c-addr" placeholder="DIRECCIÓN EXACTA..." class="w-full border-2 border-black p-2 font-bold hidden"></textarea>
-                    
-                    <button onclick="sendOrder()" class="w-full bg-[#25D366] text-white py-3 font-bold border-brutal flex justify-center gap-2 items-center">
-                        <i class="fab fa-whatsapp text-xl"></i> PEDIR POR WHATSAPP
-                    </button>
-                </div>
-
-                <button id="btn-pay" onclick="initCheckout()" class="w-full bg-black text-white py-3 font-bold border-brutal">
-                    CHECKOUT
+            <div class="flex items-center gap-4">
+                <button id="auth-btn" onclick="router.navigate('profile')" class="text-white hover:text-neon-cyan transition">
+                    <i class="fas fa-user-astronaut text-xl"></i>
+                </button>
+                <button onclick="cartManager.toggle()" class="relative text-white hover:text-neon-red transition group">
+                    <div class="absolute -top-2 -right-2 bg-neon-red text-black text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-sm clip-btn" id="cart-counter">0</div>
+                    <i class="fas fa-shopping-bag text-xl"></i>
                 </button>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Modal Login -->
-    <div id="login-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" onclick="toggleLogin()"></div>
-        <div class="relative bg-white border-2 border-black p-8 w-full max-w-sm shadow-[8px_8px_0px_0px_#fff]">
-            <h2 class="text-3xl font-street mb-6 text-center">KURA MEMBERS</h2>
-            <input id="l-email" type="email" placeholder="EMAIL" class="w-full border-2 border-black p-3 mb-2 font-bold bg-gray-100">
-            <input id="l-pass" type="password" placeholder="PASSWORD" class="w-full border-2 border-black p-3 mb-4 font-bold bg-gray-100">
-            <div class="flex gap-2">
-                <button onclick="doLogin()" class="flex-1 bg-black text-white py-2 font-bold hover:bg-gray-800">ENTRAR</button>
-                <button onclick="doRegister()" class="flex-1 border-2 border-black py-2 font-bold hover:bg-gray-100">REGISTRO</button>
+    <!-- Contenedor Principal Dinámico (SPA Router) -->
+    <main id="app-container" class="flex-grow pt-16 relative min-h-screen"></main>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-gray-800 py-10 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 pointer-events-none text-[20vw] font-jp font-black text-gray-500 leading-none select-none flex items-center justify-center">未来</div>
+        <div class="relative z-10">
+            <h2 class="text-2xl font-cyber mb-4">KURA STUDIO <span class="text-neon-red">2026</span></h2>
+            <div class="flex justify-center gap-6 text-xl mb-6 text-gray-400">
+                <a href="#" class="hover:text-white"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-white"><i class="fab fa-tiktok"></i></a>
             </div>
+            <p class="text-xs text-gray-600 font-mono tracking-widest">MANAGUA, NICARAGUA // EST. 2026</p>
+        </div>
+    </footer>
+
+    <!-- Overlay Carrito -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-panel border-l border-gray-800 z-[60] transform translate-x-full transition-transform duration-300 shadow-2xl shadow-neon-red/10 flex flex-col">
+        <div class="p-6 border-b border-gray-800 flex justify-between items-center bg-black/50">
+            <h2 class="text-xl font-cyber tracking-wider text-neon-cyan">SYSTEM.CART <span class="text-xs font-jp opacity-50 ml-2">カート</span></h2>
+            <button onclick="cartManager.toggle()" class="text-gray-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+        </div>
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+        <div class="p-6 bg-black border-t border-gray-800">
+            <div class="flex justify-between items-end mb-4 font-mono">
+                <span class="text-gray-400">SUBTOTAL</span>
+                <span class="text-2xl font-bold text-neon-red" id="cart-total">C$ 0</span>
+            </div>
+            <button onclick="router.navigate('checkout')" class="w-full bg-white text-black font-black py-4 hover:bg-neon-cyan transition clip-btn tracking-widest text-lg">INIT_CHECKOUT_PROTOCOL</button>
         </div>
     </div>
+    <div id="cart-overlay" onclick="cartManager.toggle()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[55] hidden transition-opacity opacity-0"></div>
 
+    <!-- Modal de Producto -->
+    <div id="product-modal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="router.closeModal()"></div>
+        <div id="product-modal-content" class="relative w-full max-w-4xl bg-panel border border-gray-700 shadow-[0_0_30px_rgba(255,0,60,0.1)] flex flex-col md:flex-row overflow-hidden max-h-[90vh]"></div>
+    </div>
+
+    <!-- Scripts de Funcionalidad -->
     <script type="module">
+        // Importamos módulos de CDN para que funcionen directo en el navegador
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, get, child, set, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // TUS DATOS DE CONEXIÓN EXACTOS
+        // --- TU CONFIGURACIÓN REAL DE FIREBASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyDhIbUHfD8FARW9kz8ekqp5O0jqZQU7etc",
             authDomain: "kura-studio.firebaseapp.com",
@@ -132,178 +169,423 @@
             appId: "1:238358999866:web:9fc2e446d816dae8981603",
             measurementId: "G-P6B46DN506"
         };
-
+        
+        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        const analytics = getAnalytics(app); // Analytics activado
         const auth = getAuth(app);
+        const db = getDatabase(app);
 
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let products = [];
-        let user = null;
-
-        // Cargar Productos (Compatibilidad Realtime DB)
-        function load() {
-            const dbRef = ref(db);
-            get(child(dbRef, `products`)).then((snapshot) => {
-                document.getElementById('loader').style.display = 'none';
-                const grid = document.getElementById('products-grid');
-                grid.innerHTML = '';
-
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    // Transformar objeto de Firebase a Array
-                    products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-                    
-                    products.forEach(p => {
-                        // Proteger contra tallas vacías
-                        const sizesString = p.sizesString || "UNICA:0";
-                        const sizes = sizesString.split(',').map(s => {
-                            const parts = s.split(':');
-                            if(parts.length < 2) return '';
-                            const t = parts[0].trim();
-                            const pr = parts[1].trim();
-                            return `<option value="${t}" data-price="${pr}">${t} - $${pr}</option>`;
-                        }).join('');
-
-                        grid.innerHTML += `
-                        <div class="group">
-                            <div class="border-2 border-black aspect-[3/4] overflow-hidden mb-3 relative">
-                                <img src="${p.imageUrl}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
-                                <div class="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 font-bold">NEW</div>
-                            </div>
-                            <h3 class="text-2xl font-street leading-none">${p.name}</h3>
-                            <p class="text-xs text-gray-500 mb-3 line-clamp-2">${p.description}</p>
-                            <div class="flex border-2 border-black h-10">
-                                <select id="size-${p.id}" class="w-2/3 px-2 font-bold bg-white h-full outline-none">${sizes}</select>
-                                <button onclick="window.add('${p.id}')" class="w-1/3 bg-black text-white h-full hover:bg-gray-800"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </div>`;
-                    });
-                } else {
-                    grid.innerHTML = '<p class="text-center w-full col-span-3">NO HAY PRODUCTOS AÚN</p>';
+        // --- HELPERS PARA LOCALSTORAGE SEGURO ---
+        const storageHelper = {
+            get: (key) => {
+                try {
+                    const item = localStorage.getItem(key);
+                    return item ? JSON.parse(item) : null;
+                } catch (e) {
+                    console.warn("Storage access denied, using memory fallback");
+                    return null;
                 }
-            }).catch((error) => {
-                console.error(error);
-                document.getElementById('loader').innerText = "Error cargando datos";
-            });
-        }
-
-        // Carrito Logic
-        window.add = (id) => {
-            const p = products.find(x => x.id === id);
-            const sel = document.getElementById(`size-${id}`);
-            if(!sel.value) return alert("Selecciona una talla");
-            
-            cart.push({
-                id: p.id, name: p.name, 
-                size: sel.value, 
-                price: parseFloat(sel.options[sel.selectedIndex].dataset.price)
-            });
-            updateCart();
-            toggleCart();
+            },
+            set: (key, value) => {
+                try {
+                    localStorage.setItem(key, JSON.stringify(value));
+                } catch (e) {
+                    console.warn("Storage access denied");
+                }
+            }
         };
 
-        window.remove = (i) => { cart.splice(i, 1); updateCart(); };
-        
-        function updateCart() {
-            localStorage.setItem('cart', JSON.stringify(cart));
-            document.getElementById('cart-count').innerText = cart.length;
-            const list = document.getElementById('cart-items');
-            list.innerHTML = '';
-            let total = 0;
-            
-            cart.forEach((item, i) => {
-                total += item.price;
-                list.innerHTML += `
-                <div class="flex justify-between items-center border-b pb-2 border-gray-300">
-                    <div>
-                        <div class="font-bold text-sm">${item.name}</div>
-                        <div class="text-xs bg-black text-white px-1 inline-block">${item.size}</div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="font-bold">$${item.price}</span>
-                        <button onclick="remove(${i})" class="text-red-500 text-xs">X</button>
-                    </div>
-                </div>`;
-            });
-            document.getElementById('cart-total').innerText = '$' + total.toFixed(2);
-            
-            document.getElementById('checkout-box').classList.add('hidden');
-            document.getElementById('btn-pay').classList.remove('hidden');
-        }
+        // --- ESTADO GLOBAL ---
+        const state = {
+            user: null,
+            products: [],
+            cart: storageHelper.get('cart') || [], // Usamos el helper seguro
+            userData: null
+        };
 
-        // Checkout
-        window.initCheckout = () => {
-            if(cart.length === 0) return alert("Carrito vacío");
-            if(!user) { toggleCart(); toggleLogin(); return; }
-            document.getElementById('btn-pay').classList.add('hidden');
-            document.getElementById('checkout-box').classList.remove('hidden');
-        }
+        // --- MOCK DATA (Solo por si falla la DB o está vacía) ---
+        const mockProducts = [
+            { id: '1', name: 'AKIRA PROTOTYPE', price: 850, image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=1000', category: 'T-SHIRT', desc: 'Edición limitada. 240GSM.' },
+            { id: '2', name: 'NEO TOKYO HOODIE', price: 1200, image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1000', category: 'HOODIE', desc: 'Oversized fit. Detalles desgastados.' },
+            { id: '3', name: 'GHOST SHELL', price: 900, image: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=1000', category: 'T-SHIRT', desc: 'Gráfico alta densidad.' }
+        ];
 
-        window.toggleAddress = () => {
-            const type = document.getElementById('delivery-type').value;
-            document.getElementById('c-addr').classList.toggle('hidden', type === 'pickup');
-        }
+        // --- HELPERS ---
+        // VERSIÓN SEGURA: Evita errores si 'amount' es undefined/null
+        const formatMoney = (amount) => {
+            if (amount === undefined || amount === null || isNaN(amount)) return 'C$ 0';
+            return `C$ ${Number(amount).toLocaleString('es-NI')}`;
+        };
 
-        window.sendOrder = async () => {
-            const type = document.getElementById('delivery-type').value;
-            const name = document.getElementById('c-name').value;
-            const addr = document.getElementById('c-addr').value;
-            
-            if(!name) return alert("Nombre requerido");
-            if(type === 'delivery' && !addr) return alert("Dirección requerida");
+        const showToast = (msg, type = 'normal') => {
+            Toastify({
+                text: msg, duration: 3000, gravity: "bottom", position: "right",
+                style: { background: type === 'error' ? "#FF003C" : "#00F0FF", color: "black", fontWeight: "bold" }
+            }).showToast();
+        };
 
-            const total = cart.reduce((sum, i) => sum + i.price, 0);
-            const orderId = 'KURA-' + Math.floor(Math.random()*10000);
+        // --- CART MANAGER ---
+        window.cartManager = {
+            toggle: () => {
+                const sb = document.getElementById('cart-sidebar');
+                const ov = document.getElementById('cart-overlay');
+                if (sb.classList.contains('translate-x-full')) {
+                    sb.classList.remove('translate-x-full');
+                    ov.classList.remove('hidden');
+                    setTimeout(() => ov.classList.remove('opacity-0'), 10);
+                } else {
+                    sb.classList.add('translate-x-full');
+                    ov.classList.add('opacity-0');
+                    setTimeout(() => ov.classList.add('hidden'), 300);
+                }
+                cartManager.render();
+            },
+            add: (product, size) => {
+                const item = { ...product, size, cartId: Date.now() };
+                state.cart.push(item);
+                // Guardado seguro
+                storageHelper.set('cart', state.cart);
+                cartManager.render();
+                cartManager.toggle();
+                showToast(`AGREGADO: ${product.name}`);
+            },
+            remove: (cartId) => {
+                state.cart = state.cart.filter(i => i.cartId !== cartId);
+                // Guardado seguro
+                storageHelper.set('cart', state.cart);
+                cartManager.render();
+            },
+            render: () => {
+                document.getElementById('cart-counter').innerText = state.cart.length;
+                const container = document.getElementById('cart-items-container');
+                container.innerHTML = '';
+                let total = 0;
+                if (state.cart.length === 0) container.innerHTML = `<div class="text-center text-gray-600 mt-10 font-mono">TU INVENTARIO ESTÁ VACÍO.</div>`;
 
-            // Guardar en Realtime DB
-            const newOrderRef = push(ref(db, 'orders'));
-            await set(newOrderRef, {
-                orderId, userId: user.uid, customer: name, 
-                type, address: addr || 'Tienda', 
-                items: cart, total, date: new Date().toISOString()
-            });
-
-            let msg = `🔥 *PEDIDO KURA STUDIO* 🔥%0A%0A🆔 *Orden:* ${orderId}%0A👤 *Cliente:* ${name}%0A🚚 *Entrega:* ${type.toUpperCase()}%0A`;
-            if(type === 'delivery') msg += `📍 *Dirección:* ${addr}%0A`;
-            msg += `%0A*ITEMS:*%0A`;
-            cart.forEach(i => msg += `▪ ${i.name} [${i.size}] $${i.price}%0A`);
-            msg += `%0A💰 *TOTAL: $${total}*`;
-
-            cart = []; updateCart(); toggleCart();
-            window.open(`https://wa.me/50584016969?text=${msg}`, '_blank');
-        }
-
-        // Auth
-        window.doLogin = async () => {
-            try {
-                await signInWithEmailAndPassword(auth, document.getElementById('l-email').value, document.getElementById('l-pass').value);
-                toggleLogin();
-            } catch(e) { alert("Error: " + e.message); }
-        }
-        window.doRegister = async () => {
-            try {
-                await createUserWithEmailAndPassword(auth, document.getElementById('l-email').value, document.getElementById('l-pass').value);
-                toggleLogin();
-            } catch(e) { alert("Error: " + e.message); }
-        }
-        window.logout = () => signOut(auth);
-
-        onAuthStateChanged(auth, (u) => {
-            user = u;
-            const div = document.getElementById('user-display');
-            if(u) {
-                div.innerHTML = `${u.email.split('@')[0]} / <button onclick="logout()" class="underline">SALIR</button>`;
-            } else {
-                div.innerHTML = `<button onclick="toggleLogin()">LOGIN</button>`;
+                state.cart.forEach(item => {
+                    const price = item.price || 0; // Fallback
+                    total += price;
+                    container.innerHTML += `
+                        <div class="flex gap-4 bg-black p-3 border border-gray-800 relative group">
+                            <img src="${item.image || 'https://placehold.co/100'}" class="w-16 h-16 object-cover grayscale">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-sm leading-tight">${item.name}</h4>
+                                <p class="text-xs text-gray-500 font-mono mt-1">SIZE: ${item.size}</p>
+                                <p class="text-neon-cyan font-bold text-sm mt-1">${formatMoney(item.price)}</p>
+                            </div>
+                            <button onclick="cartManager.remove(${item.cartId})" class="absolute top-2 right-2 text-gray-600 hover:text-red-500"><i class="fas fa-times"></i></button>
+                        </div>
+                    `;
+                });
+                document.getElementById('cart-total').innerText = formatMoney(total);
+            },
+            clear: () => {
+                state.cart = [];
+                // Guardado seguro
+                storageHelper.set('cart', []);
+                cartManager.render();
             }
+        };
+
+        // --- ROUTER & VIEWS ---
+        window.router = {
+            navigate: (path) => window.location.hash = path,
+            closeModal: () => {
+                document.getElementById('product-modal').classList.add('hidden');
+                document.getElementById('product-modal').classList.remove('flex');
+                if(window.location.hash.includes('product')) window.location.hash = 'shop';
+            },
+            handleRoute: async () => {
+                const hash = window.location.hash.slice(1) || 'home';
+                const app = document.getElementById('app-container');
+                const [route, param] = hash.split('/');
+                window.scrollTo(0,0);
+
+                if (route === 'home') app.innerHTML = views.home();
+                else if (route === 'shop') {
+                    app.innerHTML = views.shop();
+                    await logic.loadProducts();
+                } else if (route === 'product') {
+                    if (!document.getElementById('shop-grid')) app.innerHTML = views.shop(); 
+                    await logic.loadProducts();
+                    logic.openProductModal(param);
+                } else if (route === 'profile') {
+                    if (!state.user) app.innerHTML = views.auth();
+                    else {
+                        app.innerHTML = views.profile();
+                        logic.loadProfileData();
+                    }
+                } else if (route === 'checkout') app.innerHTML = views.checkout();
+            }
+        };
+
+        // --- VIEWS COMPONENTS ---
+        const views = {
+            home: () => `
+                <section class="relative h-[80vh] flex items-center justify-center overflow-hidden border-b border-gray-800">
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1617382604673-35f92506e985?q=80&w=2000')] bg-cover bg-center grayscale opacity-40"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
+                    <div class="relative z-10 text-center px-4">
+                        <div class="mb-4 inline-block border border-neon-red px-4 py-1 text-neon-red text-xs tracking-[0.5em] font-bold bg-black/50 backdrop-blur">NEW DROP</div>
+                        <h1 class="text-6xl md:text-9xl font-cyber text-white leading-none mb-6 glitch-text" data-text="KURA_2026">KURA_2026</h1>
+                        <p class="text-gray-400 max-w-lg mx-auto mb-8 font-mono text-sm border-l-2 border-neon-cyan pl-4 text-left">Urban Chaos. Anime. Minimalismo.</p>
+                        <button onclick="router.navigate('shop')" class="bg-white text-black font-black px-10 py-4 text-lg clip-btn hover:bg-neon-cyan transition uppercase tracking-widest">Explorar <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </section>
+                <div class="bg-neon-red text-black overflow-hidden py-3 font-black text-xl whitespace-nowrap font-cyber border-y border-black">
+                    <div class="animate-[marquee_20s_linear_infinite]">/// MANAGUA /// STREETWEAR /// KURA STUDIO /// ANIME AESTHETIC /// C$ PRICES ///</div>
+                </div>
+            `,
+            shop: () => `
+                <div class="container mx-auto px-4 py-12">
+                    <h2 class="text-4xl font-cyber text-white mb-12">COLLECTION <span class="text-neon-red">01</span></h2>
+                    <div id="loader" class="text-center py-20 text-neon-cyan"><div class="loader"></div><br>SYNCING RTDB...</div>
+                    <div id="shop-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+                </div>
+            `,
+            auth: () => `
+                <div class="container mx-auto px-4 py-20 flex justify-center">
+                    <div class="w-full max-w-md bg-panel border border-gray-800 p-8 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-neon-red"></div>
+                        <h2 class="text-3xl font-cyber text-center mb-8">LOGIN / REGISTER</h2>
+                        <form id="auth-form" onsubmit="logic.handleAuth(event)" class="space-y-4">
+                            <input type="email" id="email" placeholder="EMAIL" required class="w-full bg-black border border-gray-700 p-3 text-white focus:border-neon-cyan outline-none font-mono">
+                            <input type="password" id="password" placeholder="PASSWORD" required class="w-full bg-black border border-gray-700 p-3 text-white focus:border-neon-cyan outline-none font-mono">
+                            <button type="submit" class="w-full bg-white text-black font-bold py-3 hover:bg-neon-red transition clip-btn mt-4">ENTRAR</button>
+                        </form>
+                    </div>
+                </div>
+            `,
+            profile: () => `
+                <div class="container mx-auto px-4 py-12">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-panel p-6 border border-gray-800 h-fit">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-xl"><i class="fas fa-user"></i></div>
+                                <div><h3 class="font-bold text-white">${state.user?.email || 'User'}</h3></div>
+                            </div>
+                            <button onclick="logic.logout()" class="w-full border border-red-900 text-red-500 py-2 text-xs font-bold hover:bg-red-900/20">CERRAR SESIÓN</button>
+                        </div>
+                        <div class="md:col-span-2 space-y-8">
+                            <div class="bg-panel p-6 border border-gray-800 relative">
+                                <h3 class="font-cyber text-xl mb-4 text-neon-cyan">DATOS DE ENVÍO</h3>
+                                <form onsubmit="logic.saveProfile(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <input type="text" id="p-name" placeholder="Nombre Completo" class="bg-black border border-gray-700 p-3 text-white outline-none">
+                                    <input type="tel" id="p-phone" placeholder="Teléfono" class="bg-black border border-gray-700 p-3 text-white outline-none">
+                                    <input type="text" id="p-address" placeholder="Dirección Exacta" class="col-span-2 bg-black border border-gray-700 p-3 text-white outline-none">
+                                    <button type="submit" class="col-span-2 bg-gray-800 text-white py-3 hover:bg-neon-cyan hover:text-black transition font-bold">GUARDAR DATOS</button>
+                                </form>
+                            </div>
+                            <div class="bg-panel p-6 border border-gray-800">
+                                <h3 class="font-cyber text-xl mb-4 text-neon-cyan">HISTORIAL DE PEDIDOS</h3>
+                                <div id="orders-list" class="space-y-4 text-sm font-mono text-gray-400"><p>Cargando historial...</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            checkout: () => `
+                <div class="container mx-auto px-4 py-12 max-w-2xl">
+                    <h2 class="text-3xl font-cyber mb-8 text-center text-white">CHECKOUT</h2>
+                    <div class="bg-panel border border-gray-800 p-8 shadow-2xl">
+                        <div class="mb-6 pb-6 border-b border-gray-800">
+                            <h3 class="font-bold text-white mb-2">RESUMEN</h3>
+                            <div class="space-y-2 text-sm text-gray-400 font-mono">
+                                ${state.cart.map(i => `<div class="flex justify-between"><span>${i.name} (${i.size})</span> <span>${formatMoney(i.price)}</span></div>`).join('')}
+                            </div>
+                            <div class="flex justify-between text-xl font-bold text-neon-red mt-4 pt-4 border-t border-gray-800">
+                                <span>TOTAL</span>
+                                <span>${formatMoney(state.cart.reduce((a,b)=>a+(b.price||0),0))}</span>
+                            </div>
+                        </div>
+                        <div id="checkout-form-container">
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <button onclick="logic.setDelivery('pickup')" id="btn-pickup" class="border border-gray-600 p-4 text-center hover:border-neon-cyan focus:bg-gray-800 text-sm">TIENDA</button>
+                                <button onclick="logic.setDelivery('delivery')" id="btn-delivery" class="border border-gray-600 p-4 text-center hover:border-neon-cyan focus:bg-gray-800 text-sm">ENVÍO</button>
+                            </div>
+                            <button onclick="logic.sendOrderWhatsApp()" class="w-full bg-[#25D366] text-black font-black py-4 flex items-center justify-center gap-3 text-lg hover:brightness-110 transition clip-btn">
+                                <i class="fab fa-whatsapp text-2xl"></i> CONFIRMAR PEDIDO
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        // --- LOGIC (REALTIME DB ADAPTATION) ---
+        window.logic = {
+            deliveryType: 'pickup',
+            setDelivery: (type) => {
+                logic.deliveryType = type;
+                document.getElementById('btn-pickup').classList.toggle('border-neon-cyan', type === 'pickup');
+                document.getElementById('btn-delivery').classList.toggle('border-neon-cyan', type === 'delivery');
+            },
+            loadProducts: async () => {
+                const grid = document.getElementById('shop-grid');
+                if(!grid) return;
+                
+                let products = [];
+                try {
+                    // RTDB Fetch Logic
+                    const dbRef = ref(db);
+                    const snapshot = await get(child(dbRef, `products`));
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        // Importante: asegurar que cada objeto tenga 'price' y 'image'
+                        products = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                    } else {
+                        // Si no hay productos en DB, usar Mock para que no se vea feo
+                        products = mockProducts; 
+                    }
+                } catch(e) { 
+                    console.error("Error cargando productos", e); 
+                    products = mockProducts; 
+                }
+
+                state.products = products;
+                document.getElementById('loader').style.display = 'none';
+                
+                // Mapeo seguro con fallbacks
+                grid.innerHTML = products.map(p => {
+                    const safeImage = p.image || p.imageUrl || 'https://placehold.co/400';
+                    const safeName = p.name || 'PRODUCTO';
+                    // formatMoney ya maneja el undefined, pero podemos pasarle p.price directamente
+                    return `
+                    <div onclick="router.navigate('product/${p.id}')" class="group cursor-pointer">
+                        <div class="relative overflow-hidden aspect-[4/5] border border-gray-800 bg-gray-900">
+                            <img src="${safeImage}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="mt-4 flex justify-between items-start">
+                            <div>
+                                <h3 class="text-xl font-bold font-cyber tracking-wide group-hover:text-neon-cyan transition">${safeName}</h3>
+                                <p class="text-neon-red font-mono font-bold">${formatMoney(p.price)}</p>
+                            </div>
+                            <i class="fas fa-plus border border-white rounded-full p-2 text-xs group-hover:bg-white group-hover:text-black transition"></i>
+                        </div>
+                    </div>
+                `}).join('');
+            },
+            openProductModal: (id) => {
+                const p = state.products.find(x => x.id == id);
+                if (!p) return;
+                const modal = document.getElementById('product-modal');
+                const content = document.getElementById('product-modal-content');
+                
+                const safeImage = p.image || p.imageUrl || 'https://placehold.co/400';
+
+                content.innerHTML = `
+                    <div class="md:w-1/2 h-64 md:h-auto relative"><img src="${safeImage}" class="absolute inset-0 w-full h-full object-cover grayscale"></div>
+                    <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center bg-panel relative">
+                        <button onclick="router.closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white"><i class="fas fa-times text-2xl"></i></button>
+                        <h2 class="text-4xl md:text-5xl font-cyber leading-none mb-2 text-white">${p.name}</h2>
+                        <p class="text-2xl text-neon-red font-bold font-mono mb-6">${formatMoney(p.price)}</p>
+                        <p class="text-gray-400 mb-8 leading-relaxed font-mono text-sm border-l border-gray-700 pl-4">${p.desc || 'Descripción no disponible.'}</p>
+                        <div class="mb-8 flex gap-4">
+                            ${['S','M','L','XL'].map(s => `<label class="cursor-pointer"><input type="radio" name="size" value="${s}" class="peer sr-only"><div class="w-12 h-12 flex items-center justify-center border border-gray-600 peer-checked:bg-white peer-checked:text-black hover:border-neon-cyan transition font-bold font-mono">${s}</div></label>`).join('')}
+                        </div>
+                        <button onclick="logic.addToCart('${p.id}')" class="w-full bg-white text-black font-black py-4 text-lg clip-btn hover:bg-neon-cyan transition uppercase tracking-widest flex justify-center items-center gap-3">AÑADIR <i class="fas fa-plus"></i></button>
+                    </div>
+                `;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            },
+            addToCart: (id) => {
+                const sizes = document.getElementsByName('size');
+                let selectedSize = null;
+                for(let s of sizes) if(s.checked) selectedSize = s.value;
+                if(!selectedSize) return showToast('⚠️ SELECCIONA TALLA', 'error');
+                const p = state.products.find(x => x.id == id);
+                cartManager.add(p, selectedSize);
+                router.closeModal();
+            },
+            handleAuth: async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const pass = document.getElementById('password').value;
+                try { await signInWithEmailAndPassword(auth, email, pass); } 
+                catch(err) { try { await createUserWithEmailAndPassword(auth, email, pass); } catch(err2) { alert(err2.message); } }
+            },
+            logout: () => signOut(auth),
+            saveProfile: async (e) => {
+                e.preventDefault();
+                const data = {
+                    name: document.getElementById('p-name').value,
+                    phone: document.getElementById('p-phone').value,
+                    address: document.getElementById('p-address').value
+                };
+                // RTDB Save: users/{uid}/info
+                await set(ref(db, 'users/' + state.user.uid + '/info'), data);
+                showToast("DATOS GUARDADOS");
+            },
+            loadProfileData: async () => {
+                // Load User Info
+                const dbRef = ref(db);
+                const infoSnap = await get(child(dbRef, `users/${state.user.uid}/info`));
+                if (infoSnap.exists()) {
+                    state.userData = infoSnap.val();
+                    if(document.getElementById('p-name')) {
+                        document.getElementById('p-name').value = state.userData.name || '';
+                        document.getElementById('p-phone').value = state.userData.phone || '';
+                        document.getElementById('p-address').value = state.userData.address || '';
+                    }
+                }
+                // Load User Orders: fetch from users/{uid}/orders
+                const ordersSnap = await get(child(dbRef, `users/${state.user.uid}/orders`));
+                const list = document.getElementById('orders-list');
+                list.innerHTML = '';
+                if(ordersSnap.exists()) {
+                    const orders = ordersSnap.val();
+                    Object.values(orders).reverse().forEach(o => {
+                        list.innerHTML += `<div class="border border-gray-800 p-3 flex justify-between"><span>${new Date(o.date).toLocaleDateString()}</span><span class="text-neon-cyan">${formatMoney(o.total)}</span></div>`;
+                    });
+                } else { list.innerHTML = 'No hay pedidos recientes.'; }
+            },
+            sendOrderWhatsApp: async () => {
+                if(!state.user) return showToast("INICIA SESIÓN PRIMERO", "error");
+                let userData = state.userData || {};
+                const total = state.cart.reduce((sum, i) => sum + (i.price || 0), 0);
+                const orderId = 'KURA-' + Math.floor(Math.random()*100000);
+                
+                const orderData = {
+                    userId: state.user.uid,
+                    orderId, items: state.cart, total,
+                    date: new Date().toISOString(),
+                    deliveryType: logic.deliveryType,
+                    customerData: userData
+                };
+
+                // 1. Guardar en Global Orders (para ti)
+                push(ref(db, 'orders'), orderData);
+                // 2. Guardar en Historial del Usuario (para ellos)
+                push(ref(db, `users/${state.user.uid}/orders`), orderData);
+
+                let msg = `👺 *PEDIDO KURA ${orderId}* %0A`;
+                if(userData.name) msg += `👤 ${userData.name}%0A`;
+                msg += `📦 ${logic.deliveryType.toUpperCase()} ${logic.deliveryType==='delivery' ? '- ' + userData.address : ''}%0A%0A`;
+                state.cart.forEach(i => msg += `▪ ${i.name} [${i.size}]%0A`);
+                msg += `%0A💰 *TOTAL: ${formatMoney(total)}*`;
+
+                cartManager.clear();
+                window.open(`https://wa.me/50584016969?text=${msg}`, '_blank');
+                router.navigate('home');
+            }
+        };
+
+        window.addEventListener('load', () => {
+            cartManager.render();
+            router.handleRoute();
         });
+        window.addEventListener('hashchange', router.handleRoute);
 
-        window.toggleCart = () => document.getElementById('cart-modal').classList.toggle('hidden');
-        window.toggleLogin = () => document.getElementById('login-modal').classList.toggle('hidden');
-
-        load();
-        updateCart();
+        if(auth) {
+            onAuthStateChanged(auth, (u) => {
+                state.user = u;
+                const btn = document.getElementById('auth-btn');
+                if(u) btn.classList.add('text-neon-cyan');
+                else btn.classList.remove('text-neon-cyan');
+            });
+        }
     </script>
 </body>
 </html>
